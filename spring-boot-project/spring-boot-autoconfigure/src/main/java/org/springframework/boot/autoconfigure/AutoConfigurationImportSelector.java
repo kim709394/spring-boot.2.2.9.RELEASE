@@ -69,6 +69,11 @@ import org.springframework.util.StringUtils;
  * @since 1.3.0
  * @see EnableAutoConfiguration
  */
+/**
+ * 实现了DeferredImportSelector接口和各种spring的Aware组件，是一个bean的注册器，通过实现各种Aware组件
+ * 通过spring回调获得bean单例池、spring容器、类加载器等各种组件
+ */
+
 public class AutoConfigurationImportSelector implements DeferredImportSelector, BeanClassLoaderAware,
 		ResourceLoaderAware, BeanFactoryAware, EnvironmentAware, Ordered {
 
@@ -88,6 +93,7 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 
 	private ResourceLoader resourceLoader;
 
+	//返回注解元数据字符串提供注册bean
 	@Override
 	public String[] selectImports(AnnotationMetadata annotationMetadata) {
 		if (!isEnabled(annotationMetadata)) {
@@ -112,17 +118,28 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 		if (!isEnabled(annotationMetadata)) {
 			return EMPTY_ENTRY;
 		}
+		//获取所有注解元数据属性值
 		AnnotationAttributes attributes = getAttributes(annotationMetadata);
+		//获取/META-INF/spring.factories配置文件的自动配置类全路径 名，封装成一个字符串集合
 		List<String> configurations = getCandidateConfigurations(annotationMetadata, attributes);
+		//利用LinkedHashSet移除重复的配置类
 		configurations = removeDuplicates(configurations);
+		//获得要排除的自动配置类，比如exclude的配置类，例如：@SpringBootApplication(exclude= RedisAutoConfiguration.class)
 		Set<String> exclusions = getExclusions(annotationMetadata, attributes);
+		//检查要排除的配置类，对于不属于自动配置类则抛出异常
 		checkExcludedClasses(configurations, exclusions);
+		//删除排除的配置类
 		configurations.removeAll(exclusions);
 		configurations = filter(configurations, autoConfigurationMetadata);
 		fireAutoConfigurationImportEvents(configurations, exclusions);
 		return new AutoConfigurationEntry(configurations, exclusions);
 	}
 
+	/**
+	 * 返回导入的group，返回的这个group接口实现org.springframework.context.annotation.DeferredImportSelector.Group接口
+	 *再调用group接口的process方法进行外部bean的注册处理
+	 *
+	 */
 	@Override
 	public Class<? extends Group> getImportGroup() {
 		return AutoConfigurationGroup.class;
@@ -168,6 +185,13 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 	 * @return a list of candidate configurations
 	 */
 	protected List<String> getCandidateConfigurations(AnnotationMetadata metadata, AnnotationAttributes attributes) {
+		/**
+		 * getSpringFactoriesLoaderFactoryClass()方法获取自动配置类注解：
+		 * org.springframework.boot.autoconfigure.EnableAutoConfiguration.class
+		 * SpringFactoriesLoader.loadFactoryNames()方法将加载spring.factories配置文件的所有配置类信息存进一个
+		 * Map<String,List<String>>中，key值为配置文件的key，value对于配置文件对于key的集合，然后获取以key为
+		 * "org.springframework.boot.autoconfigure.EnableAutoConfiguration"的value值的配置类的集合
+		 * */
 		List<String> configurations = SpringFactoriesLoader.loadFactoryNames(getSpringFactoriesLoaderFactoryClass(),
 				getBeanClassLoader());
 		Assert.notEmpty(configurations, "No auto configuration classes found in META-INF/spring.factories. If you "
@@ -386,15 +410,27 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 			this.resourceLoader = resourceLoader;
 		}
 
+		/***
+		 * bean的注册，自动配置入口方法
+		 *
+		 */
 		@Override
 		public void process(AnnotationMetadata annotationMetadata, DeferredImportSelector deferredImportSelector) {
 			Assert.state(deferredImportSelector instanceof AutoConfigurationImportSelector,
 					() -> String.format("Only %s implementations are supported, got %s",
 							AutoConfigurationImportSelector.class.getSimpleName(),
 							deferredImportSelector.getClass().getName()));
+
+			/**
+			 * getAutoConfigurationEntry()方法获取所有类路径下(包括jar包)的/META-INF/spring.factories配置文件的内容
+			 * getAutoConfigurationMetadata()方法加载所有类路径下的META-INF/spring-autoconfigure-metadata.properties
+			 * 配置文件的自动配置元数据内容
+			 * */
 			AutoConfigurationEntry autoConfigurationEntry = ((AutoConfigurationImportSelector) deferredImportSelector)
 					.getAutoConfigurationEntry(getAutoConfigurationMetadata(), annotationMetadata);
+			//将自动配置内容放入集合
 			this.autoConfigurationEntries.add(autoConfigurationEntry);
+			//遍历自动配置类
 			for (String importClassName : autoConfigurationEntry.getConfigurations()) {
 				this.entries.putIfAbsent(importClassName, annotationMetadata);
 			}

@@ -79,7 +79,11 @@ import org.springframework.core.io.support.SpringFactoriesLoader;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-@AutoConfigurationPackage
+@AutoConfigurationPackage	//自动配置包
+/**
+ * spring底层注解@Import，给容器导入一个组件类AutoConfigurationImportSelector
+ * 此类实际上是一个bean的注册器，为自动配置类入口类
+ */
 @Import(AutoConfigurationImportSelector.class)
 public @interface EnableAutoConfiguration {
 
