@@ -51,6 +51,7 @@ import org.springframework.data.repository.Repository;
 @Inherited
 @SpringBootConfiguration		//标注该类为一个配置类，@Configuration	注解的包装注解
 @EnableAutoConfiguration		//标注启动自动配置类
+//该注解的作用是扫描spring注解注册为bean，如果basePackage为空则默认扫描路径是该注解所在的包和子包
 @ComponentScan(excludeFilters = { @Filter(type = FilterType.CUSTOM, classes = TypeExcludeFilter.class),
 		@Filter(type = FilterType.CUSTOM, classes = AutoConfigurationExcludeFilter.class) })
 public @interface SpringBootApplication {

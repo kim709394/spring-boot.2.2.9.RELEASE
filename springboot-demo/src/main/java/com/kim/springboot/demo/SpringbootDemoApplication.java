@@ -8,11 +8,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @description
  * @date 2022-03-28
  */
+//启动类注解
 @SpringBootApplication
 public class SpringbootDemoApplication {
 
 
 	public static void main(String[] args) {
+		//启动run方法执行
 		SpringApplication.run(SpringbootDemoApplication.class);
 	}
 }
