@@ -63,22 +63,22 @@ public enum WebApplicationType {
 		 * 判断是哪一种web应用类型，如果类路径中org.springframework.web.reactive.DispatcherHandler类存在，
 		 * org.springframework.web.servlet.DispatcherServlet类不存在，同时
 		 * org.glassfish.jersey.servlet.ServletContainer类也不存在，则判断为REACTIVE类型
-		 * */
+		 */
 		if (ClassUtils.isPresent(WEBFLUX_INDICATOR_CLASS, null) && !ClassUtils.isPresent(WEBMVC_INDICATOR_CLASS, null)
 				&& !ClassUtils.isPresent(JERSEY_INDICATOR_CLASS, null)) {
 			return WebApplicationType.REACTIVE;
 		}
 		/**
 		 * 遍历{ "javax.servlet.Servlet",
-		 * 			"org.springframework.web.context.ConfigurableWebApplicationContext" }数组，
-		 * 		如果类路径中这两个类只要有一个不存在则判断为非web应用环境
-		 * */
+		 * "org.springframework.web.context.ConfigurableWebApplicationContext" }数组，
+		 * 如果类路径中这两个类只要有一个不存在则判断为非web应用环境
+		 */
 		for (String className : SERVLET_INDICATOR_CLASSES) {
 			if (!ClassUtils.isPresent(className, null)) {
 				return WebApplicationType.NONE;
 			}
 		}
-		//前两种都不是，则判断为SERVLET的web应用环境
+		// 前两种都不是，则判断为SERVLET的web应用环境
 		return WebApplicationType.SERVLET;
 	}
 

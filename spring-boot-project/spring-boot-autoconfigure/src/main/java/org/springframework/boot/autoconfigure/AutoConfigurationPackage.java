@@ -41,7 +41,7 @@ import org.springframework.context.annotation.Import;
  * 导入组件AutoConfigurationPackages.Registrar
  * 这个组件就干一个事，就是注册org.springframework.boot.autoconfigure.AutoConfigurationPackages.BasePackages.class
  * 他有一个参数，就是获取@AutoConfigurationPackage注解所在的包全路径名
- * */
+ */
 @Import(AutoConfigurationPackages.Registrar.class)
 public @interface AutoConfigurationPackage {
 

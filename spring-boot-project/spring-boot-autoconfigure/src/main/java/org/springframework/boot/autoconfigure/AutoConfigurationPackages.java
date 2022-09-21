@@ -89,17 +89,17 @@ public abstract class AutoConfigurationPackages {
 	 * @param registry the bean definition registry
 	 * @param packageNames the package names to set
 	 */
-	//这里packageNames缺省情况下是一个使用了@SpringbootApplication注解的入口类所在的包全路径名
+	// 这里packageNames缺省情况下是一个使用了@SpringbootApplication注解的入口类所在的包全路径名
 	public static void register(BeanDefinitionRegistry registry, String... packageNames) {
-		//判断AutoConfigurationPackages.class是否已注册
+		// 判断AutoConfigurationPackages.class是否已注册
 		if (registry.containsBeanDefinition(BEAN)) {
-			//如果已注册则向它的bean定义对象的构造参数中添加packageNames包名
+			// 如果已注册则向它的bean定义对象的构造参数中添加packageNames包名
 			BeanDefinition beanDefinition = registry.getBeanDefinition(BEAN);
 			ConstructorArgumentValues constructorArguments = beanDefinition.getConstructorArgumentValues();
 			constructorArguments.addIndexedArgumentValue(0, addBasePackages(constructorArguments, packageNames));
 		}
 		else {
-			//如果 没有注册，则添加packageNames包名为构造参数，并注册
+			// 如果 没有注册，则添加packageNames包名为构造参数，并注册
 			GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
 			beanDefinition.setBeanClass(BasePackages.class);
 			beanDefinition.getConstructorArgumentValues().addIndexedArgumentValue(0, packageNames);
@@ -119,10 +119,10 @@ public abstract class AutoConfigurationPackages {
 	/**
 	 * {@link ImportBeanDefinitionRegistrar} to store the base package from the importing
 	 * configuration.
-	 */		//bean的注册器
+	 */ // bean的注册器
 	static class Registrar implements ImportBeanDefinitionRegistrar, DeterminableImports {
 
-		//注册bean方法
+		// 注册bean方法
 		@Override
 		public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
 			register(registry, new PackageImport(metadata).getPackageName());

@@ -43,7 +43,7 @@ import org.springframework.core.annotation.AliasFor;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Configuration		//底层注解
+@Configuration // 底层注解
 public @interface SpringBootConfiguration {
 
 	/**

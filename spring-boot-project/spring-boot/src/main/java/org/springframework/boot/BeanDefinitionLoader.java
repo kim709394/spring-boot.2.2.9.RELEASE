@@ -79,16 +79,16 @@ class BeanDefinitionLoader {
 		Assert.notNull(registry, "Registry must not be null");
 		Assert.notEmpty(sources, "Sources must not be empty");
 		this.sources = sources;
-		//初始化注解解析器
+		// 初始化注解解析器
 		this.annotatedReader = new AnnotatedBeanDefinitionReader(registry);
-		//初始化xml文件解析器
+		// 初始化xml文件解析器
 		this.xmlReader = new XmlBeanDefinitionReader(registry);
 		if (isGroovyPresent()) {
 			this.groovyReader = new GroovyBeanDefinitionReader(registry);
 		}
-		//实例化类路径bean定义扫描器
+		// 实例化类路径bean定义扫描器
 		this.scanner = new ClassPathBeanDefinitionScanner(registry);
-		//添加排除过滤器
+		// 添加排除过滤器
 		this.scanner.addExcludeFilter(new ClassExcludeFilter(sources));
 	}
 
@@ -128,9 +128,9 @@ class BeanDefinitionLoader {
 	 */
 	int load() {
 		int count = 0;
-		//遍历启动类集合
+		// 遍历启动类集合
 		for (Object source : this.sources) {
-			//加载方法
+			// 加载方法
 			count += load(source);
 		}
 		return count;
@@ -138,7 +138,7 @@ class BeanDefinitionLoader {
 
 	private int load(Object source) {
 		Assert.notNull(source, "Source must not be null");
-		//启动类输入class类型则调用加载class类型的load()方法
+		// 启动类输入class类型则调用加载class类型的load()方法
 		if (source instanceof Class<?>) {
 			return load((Class<?>) source);
 		}
@@ -160,9 +160,9 @@ class BeanDefinitionLoader {
 			GroovyBeanDefinitionSource loader = BeanUtils.instantiateClass(source, GroovyBeanDefinitionSource.class);
 			load(loader);
 		}
-		//如果启动类中含有@Component注解则进入此if，启动类有@SpringbootApplication注解，里面存在@Cpmponent注解
+		// 如果启动类中含有@Component注解则进入此if，启动类有@SpringbootApplication注解，里面存在@Cpmponent注解
 		if (isComponent(source)) {
-			//注册启动类为bean
+			// 注册启动类为bean
 			this.annotatedReader.register(source);
 			return 1;
 		}

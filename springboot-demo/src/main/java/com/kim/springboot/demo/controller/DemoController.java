@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/demo")
 public class DemoController {
 
-
-
 	@GetMapping("/get")
-	public String get(){
+	public String get() {
 		return "success";
 	}
 
