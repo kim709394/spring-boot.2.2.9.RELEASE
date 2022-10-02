@@ -1,5 +1,6 @@
 package com.kim.springboot.demo;
 
+import com.kim.spi.starter.annotation.EnableSpiConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -10,6 +11,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 // 启动类注解
 @SpringBootApplication
+//启用spi配置
+@EnableSpiConfig
 public class SpringbootDemoApplication {
 
 	public static void main(String[] args) {

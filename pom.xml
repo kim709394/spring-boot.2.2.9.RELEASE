@@ -8,6 +8,7 @@
 	<version>${revision}</version>
 	<modules>
 		<module>springboot-demo</module>
+		<module>spi-spring-boot-starter</module>
 	</modules>
 	<packaging>pom</packaging>
 	<name>Spring Boot Build</name>

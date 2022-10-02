@@ -4,3 +4,7 @@ spring:
 
 server:
   port: 8090
+
+spi:
+  id: 1
+  name: kim
