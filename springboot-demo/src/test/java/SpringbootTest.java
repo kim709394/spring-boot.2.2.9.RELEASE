@@ -1,3 +1,4 @@
+import com.kim.spi.starter.bean.ImportBean;
 import com.kim.spi.starter.bean.SpiBean;
 import com.kim.springboot.demo.SpringbootDemoApplication;
 import org.junit.Test;
@@ -22,6 +23,12 @@ public class SpringbootTest implements ApplicationContextAware {
 	@Test
 	public void spiTest(){
 		SpiBean bean = applicationContext.getBean(SpiBean.class);
+		System.out.println(bean);
+	}
+
+	@Test
+	public void importTest(){
+		ImportBean bean = applicationContext.getBean(ImportBean.class);
 		System.out.println(bean);
 	}
 

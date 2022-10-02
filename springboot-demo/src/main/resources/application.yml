@@ -8,3 +8,5 @@ server:
 spi:
   id: 1
   name: kim
+import:
+  import-name: kim
