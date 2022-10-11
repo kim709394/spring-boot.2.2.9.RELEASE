@@ -39,6 +39,7 @@ public interface ServletWebServerFactory {
 	 * @return a fully configured and started {@link WebServer}
 	 * @see WebServer#stop()
 	 */
+	//如果是tomcat类型的web服务，实现类是TomcatServletWebServerFactory
 	WebServer getWebServer(ServletContextInitializer... initializers);
 
 }

@@ -105,6 +105,7 @@ public abstract class DynamicRegistrationBean<D extends Registration.Dynamic> ex
 
 	@Override
 	protected final void register(String description, ServletContext servletContext) {
+		//添加web组件注册器
 		D registration = addRegistration(description, servletContext);
 		if (registration == null) {
 			logger.info(StringUtils.capitalize(description) + " was not registered (possibly already registered?)");
@@ -113,6 +114,8 @@ public abstract class DynamicRegistrationBean<D extends Registration.Dynamic> ex
 		configure(registration);
 	}
 
+	//如果是filter则实现类是AbstractFilterRegistrationBean
+	//如果是servlet则实现类是ServletRegistrationBean
 	protected abstract D addRegistration(String description, ServletContext servletContext);
 
 	protected void configure(D registration) {

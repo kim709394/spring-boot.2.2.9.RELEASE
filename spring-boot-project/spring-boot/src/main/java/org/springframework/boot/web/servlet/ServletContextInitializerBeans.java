@@ -77,12 +77,17 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 	private List<ServletContextInitializer> sortedList;
 
 	@SafeVarargs
+	//servlet上下文初始化器bean集合的构造方法
 	public ServletContextInitializerBeans(ListableBeanFactory beanFactory,
 			Class<? extends ServletContextInitializer>... initializerTypes) {
 		this.initializers = new LinkedMultiValueMap<>();
+		//这里initializerTypes参数为空，因此initializerTypes.length==0，走Collections.singletonList(ServletContextInitializer.class);这行代码
 		this.initializerTypes = (initializerTypes.length != 0) ? Arrays.asList(initializerTypes)
+				//实例化一个泛型为ServletContextInitializer的集合
 				: Collections.singletonList(ServletContextInitializer.class);
 		addServletContextInitializerBeans(beanFactory);
+		//该方法的作用是通过传入ioc容器为集合创建并添加servlet、filter、listener注册器并添加进集合
+		//在这里为集合创建并添加了servlet的注册器bean对象即RegistrationBean对象
 		addAdaptableBeans(beanFactory);
 		List<ServletContextInitializer> sortedInitializers = this.initializers.values().stream()
 				.flatMap((value) -> value.stream().sorted(AnnotationAwareOrderComparator.INSTANCE))
@@ -148,10 +153,14 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 	}
 
 	@SuppressWarnings("unchecked")
+	//通过传入ioc容器为集合创建并添加servlet、filter、listener注册器并添加进集合
 	protected void addAdaptableBeans(ListableBeanFactory beanFactory) {
 		MultipartConfigElement multipartConfig = getMultipartConfig(beanFactory);
+		//创建servlet的注册器bean对象即RegistrationBean对象并添加进集合
 		addAsRegistrationBean(beanFactory, Servlet.class, new ServletRegistrationBeanAdapter(multipartConfig));
+		//创建web过滤器注册器对象并添加进集合
 		addAsRegistrationBean(beanFactory, Filter.class, new FilterRegistrationBeanAdapter());
+		////创建web监听器注册器对象并添加进集合
 		for (Class<?> listenerType : ServletListenerRegistrationBean.getSupportedTypes()) {
 			addAsRegistrationBean(beanFactory, EventListener.class, (Class<EventListener>) listenerType,
 					new ServletListenerRegistrationBeanAdapter());
@@ -164,11 +173,13 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 		return beans.isEmpty() ? null : beans.get(0).getValue();
 	}
 
+	//创建RegistrationBean对象并添加进集合
 	protected <T> void addAsRegistrationBean(ListableBeanFactory beanFactory, Class<T> type,
 			RegistrationBeanAdapter<T> adapter) {
 		addAsRegistrationBean(beanFactory, type, type, adapter);
 	}
 
+	//创建RegistrationBean对象并添加进集合
 	private <T, B extends T> void addAsRegistrationBean(ListableBeanFactory beanFactory, Class<T> type,
 			Class<B> beanType, RegistrationBeanAdapter<T> adapter) {
 		List<Map.Entry<String, B>> entries = getOrderedBeansOfType(beanFactory, beanType, this.seen);
@@ -177,9 +188,11 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 			B bean = entry.getValue();
 			if (this.seen.add(bean)) {
 				// One that we haven't already seen
+				//从ioc容器中找到DispatcherServlet的bean，通过RegistrationBean适配器创建RegistrationBean对象
 				RegistrationBean registration = adapter.createRegistrationBean(beanName, bean, entries.size());
 				int order = getOrder(bean);
 				registration.setOrder(order);
+				//为集合添加RegistrationBean对象
 				this.initializers.add(type, registration);
 				if (logger.isTraceEnabled()) {
 					logger.trace("Created " + type.getSimpleName() + " initializer for bean '" + beanName + "'; order="
@@ -254,6 +267,7 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 	@FunctionalInterface
 	protected interface RegistrationBeanAdapter<T> {
 
+		//创建servlet注册器对象bean：RegistrationBean
 		RegistrationBean createRegistrationBean(String name, T source, int totalNumberOfSourceBeans);
 
 	}
@@ -270,6 +284,7 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 		}
 
 		@Override
+		//创建RegistrationBean对象
 		public RegistrationBean createRegistrationBean(String name, Servlet source, int totalNumberOfSourceBeans) {
 			String url = (totalNumberOfSourceBeans != 1) ? "/" + name + "/" : "/";
 			if (name.equals(DISPATCHER_SERVLET_NAME)) {

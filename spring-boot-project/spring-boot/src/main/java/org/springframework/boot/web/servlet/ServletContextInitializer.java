@@ -50,6 +50,7 @@ public interface ServletContextInitializer {
 	 * @throws ServletException if any call against the given {@code ServletContext}
 	 * throws a {@code ServletException}
 	 */
+	//实现类是RegistrationBean
 	void onStartup(ServletContext servletContext) throws ServletException;
 
 }
