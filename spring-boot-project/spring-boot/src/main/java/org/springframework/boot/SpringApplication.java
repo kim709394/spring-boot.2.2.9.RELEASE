@@ -338,6 +338,10 @@ public class SpringApplication {
 			// 打印banner
 			Banner printedBanner = printBanner(environment);
 			// 3、初始化应用上下文，此时ioc容器也被创建
+			/**
+			 * 实例化这个上下文的时候，将调用父类GenericApplicationContext的无参构造方法，
+			 * 将默认IOC容器DefaultListableBeanFactory实例化并设置进上下文
+			 * */
 			context = createApplicationContext();
 			// 实例化SpringBootExceptionReporter.class，用来支持报告关于启动的错误
 			exceptionReporters = getSpringFactoriesInstances(SpringBootExceptionReporter.class,
