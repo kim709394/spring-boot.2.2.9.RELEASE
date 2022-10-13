@@ -450,6 +450,7 @@ public class SpringApplication {
 	}
 
 	private void refreshContext(ConfigurableApplicationContext context) {
+		//调用上下文对象的refresh方法
 		refresh(context);
 		if (this.registerShutdownHook) {
 			try {
@@ -821,6 +822,7 @@ public class SpringApplication {
 	 * @param applicationContext the application context to refresh
 	 */
 	protected void refresh(ApplicationContext applicationContext) {
+		//将上下文对象强转为父类AbstractApplicationContext对象，然后调用refresh方法，此时进入spring的源码
 		Assert.isInstanceOf(AbstractApplicationContext.class, applicationContext);
 		((AbstractApplicationContext) applicationContext).refresh();
 	}
