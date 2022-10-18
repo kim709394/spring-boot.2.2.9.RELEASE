@@ -85,8 +85,11 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 		this.initializerTypes = (initializerTypes.length != 0) ? Arrays.asList(initializerTypes)
 				//实例化一个泛型为ServletContextInitializer的集合
 				: Collections.singletonList(ServletContextInitializer.class);
+		//从ioc容器中找到ServletContextInitializer类型的bean，这个bean就是DispatcherServlet自动配置时注册进ioc容器的
+		// DispatcherServletRegistrationBean，并添加到this.initializers初始化器集合。
 		addServletContextInitializerBeans(beanFactory);
 		//该方法的作用是通过传入ioc容器为集合创建并添加servlet、filter、listener注册器并添加进集合
+		//从ioc容器中找到servlet、filter、listener的bean并注册进web容器
 		//在这里为集合创建并添加了servlet的注册器bean对象即RegistrationBean对象
 		addAdaptableBeans(beanFactory);
 		List<ServletContextInitializer> sortedInitializers = this.initializers.values().stream()
@@ -134,6 +137,7 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 		this.initializers.add(type, initializer);
 		if (source != null) {
 			// Mark the underlying source as seen in case it wraps an existing bean
+			//避免重复注册的记录set集合
 			this.seen.add(source);
 		}
 		if (logger.isTraceEnabled()) {

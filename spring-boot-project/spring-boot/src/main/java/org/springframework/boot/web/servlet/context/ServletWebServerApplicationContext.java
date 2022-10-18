@@ -189,6 +189,7 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 			 * getSelfInitializer()获取servlet上下文初始化器，包含servlet、filter、listener等web组件
 			 * 并把这些组件添加进servlet容器，完成这些web组件的启用和配置，作用等同web.xml
 			 * factory.getWebServer()方法中，实例化一个tomcat对象，并启动，springboot自动配置完成并启动
+			 * 先调用getWebServer()方法，后调用getSelfInitializer()方法
 			 * */
 			this.webServer = factory.getWebServer(getSelfInitializer());
 		}
@@ -240,7 +241,10 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 		prepareWebApplicationContext(servletContext);
 		registerApplicationScope(servletContext);
 		WebApplicationContextUtils.registerEnvironmentBeans(getBeanFactory(), servletContext);
-		//获取一个ServletContextInitializer初始化器集合，这些初始化器包括servlet、filter、listener
+		/**获取一个ServletContextInitializer初始化器集合，这些初始化器包括servlet、filter、listener
+		 * 在这里从ioc容器获取到DispatcherServlet自动配置的注册的DispatcherServletRegistrationBean对象
+		 * 并调用这个DispatcherServletRegistrationBean对象的onStartup()方法，完成DispatcherServlet在tomcat的注册
+		 * */
 		for (ServletContextInitializer beans : getServletContextInitializerBeans()) {
 			//servlet、filter、listener的注册器bean在这里被添加进servlet上下文，从而完成
 			//以上web组件在web服务的启用和配置，作用等同于web.xml上进行配置
