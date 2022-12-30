@@ -14,9 +14,9 @@ import java.lang.annotation.Target;
  * @description @import注解引入配置类，热插拔注解
  * @date 2022-10-03
  */
-@Target({ElementType.TYPE})
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Import({ImportBean.class})
+@Import({ ImportBean.class })
 public @interface EnableImportBean {
 
 }

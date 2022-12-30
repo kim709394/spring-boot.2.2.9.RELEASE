@@ -13,8 +13,9 @@ import java.lang.annotation.Target;
  * @description 热插拔技术，spi配置标记类引入进ioc容器
  * @date 2022-10-03
  */
-@Target({ElementType.TYPE})
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Import({SpiMarker.class})
+@Import({ SpiMarker.class })
 public @interface EnableSpiConfig {
+
 }

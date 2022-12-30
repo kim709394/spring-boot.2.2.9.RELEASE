@@ -84,11 +84,11 @@ public class TomcatWebServer implements WebServer {
 		Assert.notNull(tomcat, "Tomcat Server must not be null");
 		this.tomcat = tomcat;
 		this.autoStart = autoStart;
-		//初始化tomcat
+		// 初始化tomcat
 		initialize();
 	}
 
-	//初始化tomcat的方法
+	// 初始化tomcat的方法
 	private void initialize() throws WebServerException {
 		logger.info("Tomcat initialized with port(s): " + getPortsDescription(false));
 		synchronized (this.monitor) {
@@ -105,7 +105,7 @@ public class TomcatWebServer implements WebServer {
 				});
 
 				// Start the server to trigger initialization listeners
-				//todo tomcat启动
+				// todo tomcat启动
 				this.tomcat.start();
 
 				// We can re-throw failure exception directly in the main thread

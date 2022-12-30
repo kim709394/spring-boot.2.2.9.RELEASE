@@ -5,17 +5,16 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 /**
  * @author huangjie
- * @description  spi机制配置类bean
+ * @description spi机制配置类bean
  * @date 2022-10-03
  */
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "spi")
 public class SpiBean {
 
-
 	private Integer id;
-	private String name;
 
+	private String name;
 
 	public Integer getId() {
 		return id;
@@ -37,4 +36,5 @@ public class SpiBean {
 	public String toString() {
 		return "SpiBean{" + "id=" + id + ", name='" + name + '\'' + '}';
 	}
+
 }

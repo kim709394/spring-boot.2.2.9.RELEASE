@@ -21,13 +21,13 @@ public class SpringbootTest implements ApplicationContextAware {
 	private ApplicationContext applicationContext;
 
 	@Test
-	public void spiTest(){
+	public void spiTest() {
 		SpiBean bean = applicationContext.getBean(SpiBean.class);
 		System.out.println(bean);
 	}
 
 	@Test
-	public void importTest(){
+	public void importTest() {
 		ImportBean bean = applicationContext.getBean(ImportBean.class);
 		System.out.println(bean);
 	}
@@ -36,4 +36,5 @@ public class SpringbootTest implements ApplicationContextAware {
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
 	}
+
 }

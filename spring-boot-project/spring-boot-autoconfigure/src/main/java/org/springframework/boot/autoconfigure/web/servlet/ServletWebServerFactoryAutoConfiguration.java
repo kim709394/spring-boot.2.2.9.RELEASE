@@ -52,8 +52,7 @@ import org.springframework.web.filter.ForwardedHeaderFilter;
  * @author Dave Syer
  * @author Ivan Sopov
  * @author Brian Clozel
- * @author Stephane Nicoll
- * 自动配置内嵌tomcat配置类
+ * @author Stephane Nicoll 自动配置内嵌tomcat配置类
  * @since 2.0.0
  */
 @Configuration(proxyBeanMethods = false)
@@ -62,11 +61,11 @@ import org.springframework.web.filter.ForwardedHeaderFilter;
 @ConditionalOnWebApplication(type = Type.SERVLET)
 @EnableConfigurationProperties(ServerProperties.class)
 @Import({ ServletWebServerFactoryAutoConfiguration.BeanPostProcessorsRegistrar.class,
-		//导入内嵌tomcat配置类
+		// 导入内嵌tomcat配置类
 		ServletWebServerFactoryConfiguration.EmbeddedTomcat.class,
-		//导入内嵌jetty配置类
+		// 导入内嵌jetty配置类
 		ServletWebServerFactoryConfiguration.EmbeddedJetty.class,
-		//导入内嵌undertow配置类
+		// 导入内嵌undertow配置类
 		ServletWebServerFactoryConfiguration.EmbeddedUndertow.class })
 public class ServletWebServerFactoryAutoConfiguration {
 

@@ -63,14 +63,14 @@ import org.springframework.context.annotation.Configuration;
 class ServletWebServerFactoryConfiguration {
 
 	@Configuration(proxyBeanMethods = false)
-	//条件注解，项目类路径存在以下三个类才进行内嵌tomcat的配置
+	// 条件注解，项目类路径存在以下三个类才进行内嵌tomcat的配置
 	@ConditionalOnClass({ Servlet.class, Tomcat.class, UpgradeProtocol.class })
-	//条件注解，存在下bean“ServletWebServerFactory”才进行内嵌tomcat的配置
+	// 条件注解，存在下bean“ServletWebServerFactory”才进行内嵌tomcat的配置
 	@ConditionalOnMissingBean(value = ServletWebServerFactory.class, search = SearchStrategy.CURRENT)
 	static class EmbeddedTomcat {
 
-		//配置tomcat配置工厂类，在工厂类TomcatServletWebServerFactory调用了一个getWebServer方法，
-		//在这个方法中进行内嵌tomcat的实例化和配置
+		// 配置tomcat配置工厂类，在工厂类TomcatServletWebServerFactory调用了一个getWebServer方法，
+		// 在这个方法中进行内嵌tomcat的实例化和配置
 		@Bean
 		TomcatServletWebServerFactory tomcatServletWebServerFactory(
 				ObjectProvider<TomcatConnectorCustomizer> connectorCustomizers,

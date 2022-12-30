@@ -90,8 +90,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * @see XmlServletWebServerApplicationContext
  * @see ServletWebServerFactory
  */
-//servlet web服务应用上下文对象，该对象继承了spring的ApplicationContext应用上下文对象
-//因此，该上下文对象包含了spring的上下文对象，同时包含了ioc容器
+// servlet web服务应用上下文对象，该对象继承了spring的ApplicationContext应用上下文对象
+// 因此，该上下文对象包含了spring的上下文对象，同时包含了ioc容器
 public class ServletWebServerApplicationContext extends GenericWebApplicationContext
 		implements ConfigurableWebServerApplicationContext {
 
@@ -138,7 +138,7 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 	}
 
 	@Override
-	//执行refresh初始化方法，也就是spring的refresh方法
+	// 执行refresh初始化方法，也就是spring的refresh方法
 	public final void refresh() throws BeansException, IllegalStateException {
 		try {
 			super.refresh();
@@ -150,11 +150,11 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 	}
 
 	@Override
-	//重写父类的onRefresh()方法，当refresh方法执行到这一步时，调用的是该重写的方法
+	// 重写父类的onRefresh()方法，当refresh方法执行到这一步时，调用的是该重写的方法
 	protected void onRefresh() {
 		super.onRefresh();
 		try {
-			//创建web服务
+			// 创建web服务
 			createWebServer();
 		}
 		catch (Throwable ex) {
@@ -177,12 +177,12 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 		stopAndReleaseWebServer();
 	}
 
-	//创建web服务器对象
+	// 创建web服务器对象
 	private void createWebServer() {
 		WebServer webServer = this.webServer;
 		ServletContext servletContext = getServletContext();
 		if (webServer == null && servletContext == null) {
-			//获取web服务器对象，该对象最终获取的是TomcatServletWebServerFactory对象
+			// 获取web服务器对象，该对象最终获取的是TomcatServletWebServerFactory对象
 			ServletWebServerFactory factory = getWebServerFactory();
 			/**
 			 * 调用TomcatServletWebServerFactory的getWebServer方法
@@ -190,7 +190,7 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 			 * 并把这些组件添加进servlet容器，完成这些web组件的启用和配置，作用等同web.xml
 			 * factory.getWebServer()方法中，实例化一个tomcat对象，并启动，springboot自动配置完成并启动
 			 * 先调用getWebServer()方法，后调用getSelfInitializer()方法
-			 * */
+			 */
 			this.webServer = factory.getWebServer(getSelfInitializer());
 		}
 		else if (servletContext != null) {
@@ -221,8 +221,8 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 			throw new ApplicationContextException("Unable to start ServletWebServerApplicationContext due to multiple "
 					+ "ServletWebServerFactory beans : " + StringUtils.arrayToCommaDelimitedString(beanNames));
 		}
-		//从ioc容器获取一个ServletWebServerFactory的bean返回，这个bean其实就是前置tomcat对象配置的时候
-		//注册进ioc容器的TomcatServletWebServerFactory对象
+		// 从ioc容器获取一个ServletWebServerFactory的bean返回，这个bean其实就是前置tomcat对象配置的时候
+		// 注册进ioc容器的TomcatServletWebServerFactory对象
 		return getBeanFactory().getBean(beanNames[0], ServletWebServerFactory.class);
 	}
 
@@ -233,7 +233,7 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 	 * @see #prepareWebApplicationContext(ServletContext)
 	 */
 	private org.springframework.boot.web.servlet.ServletContextInitializer getSelfInitializer() {
-		//调用selfInitialize()方法
+		// 调用selfInitialize()方法
 		return this::selfInitialize;
 	}
 
@@ -241,13 +241,14 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 		prepareWebApplicationContext(servletContext);
 		registerApplicationScope(servletContext);
 		WebApplicationContextUtils.registerEnvironmentBeans(getBeanFactory(), servletContext);
-		/**获取一个ServletContextInitializer初始化器集合，这些初始化器包括servlet、filter、listener
+		/**
+		 * 获取一个ServletContextInitializer初始化器集合，这些初始化器包括servlet、filter、listener
 		 * 在这里从ioc容器获取到DispatcherServlet自动配置的注册的DispatcherServletRegistrationBean对象
 		 * 并调用这个DispatcherServletRegistrationBean对象的onStartup()方法，完成DispatcherServlet在tomcat的注册
-		 * */
+		 */
 		for (ServletContextInitializer beans : getServletContextInitializerBeans()) {
-			//servlet、filter、listener的注册器bean在这里被添加进servlet上下文，从而完成
-			//以上web组件在web服务的启用和配置，作用等同于web.xml上进行配置
+			// servlet、filter、listener的注册器bean在这里被添加进servlet上下文，从而完成
+			// 以上web组件在web服务的启用和配置，作用等同于web.xml上进行配置
 			beans.onStartup(servletContext);
 		}
 	}
@@ -273,7 +274,7 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 	 * @return the servlet initializer beans
 	 */
 	protected Collection<ServletContextInitializer> getServletContextInitializerBeans() {
-		//传入ioc容器实例化一个servlet上下文初始化器对象集合，这些初始化器包括servlet、filter、listener
+		// 传入ioc容器实例化一个servlet上下文初始化器对象集合，这些初始化器包括servlet、filter、listener
 		return new ServletContextInitializerBeans(getBeanFactory());
 	}
 

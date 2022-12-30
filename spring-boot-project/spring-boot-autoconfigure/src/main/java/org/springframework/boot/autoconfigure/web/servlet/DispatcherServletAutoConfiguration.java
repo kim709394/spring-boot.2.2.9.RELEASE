@@ -64,15 +64,15 @@ import org.springframework.web.servlet.DispatcherServlet;
  * @since 2.0.0
  */
 @AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
-//声明这是一个配置类
+// 声明这是一个配置类
 @Configuration(proxyBeanMethods = false)
-//项目上下文是servlet环境才进行配置
+// 项目上下文是servlet环境才进行配置
 @ConditionalOnWebApplication(type = Type.SERVLET)
-//项目中存在DispatcherServlet这个类才会进行配置
+// 项目中存在DispatcherServlet这个类才会进行配置
 @ConditionalOnClass(DispatcherServlet.class)
-//必须在ServletWebServerFactoryAutoConfiguration配置类执行完成之后才进行配置
+// 必须在ServletWebServerFactoryAutoConfiguration配置类执行完成之后才进行配置
 @AutoConfigureAfter(ServletWebServerFactoryAutoConfiguration.class)
-//自动配置DispatcherServlet，springmvc核心控制器的配置类
+// 自动配置DispatcherServlet，springmvc核心控制器的配置类
 public class DispatcherServletAutoConfiguration {
 
 	/*
@@ -85,20 +85,20 @@ public class DispatcherServletAutoConfiguration {
 	 */
 	public static final String DEFAULT_DISPATCHER_SERVLET_REGISTRATION_BEAN_NAME = "dispatcherServletRegistration";
 
-	//DispatcherServlet mvc核心控制器的配置类
+	// DispatcherServlet mvc核心控制器的配置类
 	@Configuration(proxyBeanMethods = false)
-	//在DefaultDispatcherServletCondition配置类已执行的前提下才进行配置，
-	//DefaultDispatcherServletCondition主要是判断是否已存在DispatcherServlet,不存在才进行配置
+	// 在DefaultDispatcherServletCondition配置类已执行的前提下才进行配置，
+	// DefaultDispatcherServletCondition主要是判断是否已存在DispatcherServlet,不存在才进行配置
 	@Conditional(DefaultDispatcherServletCondition.class)
 	@ConditionalOnClass(ServletRegistration.class)
-	//从application.yml配置文件中获取web的配置信息配置进行servlet
+	// 从application.yml配置文件中获取web的配置信息配置进行servlet
 	@EnableConfigurationProperties({ HttpProperties.class, WebMvcProperties.class })
 	protected static class DispatcherServletConfiguration {
 
-		//配置DispatcherServlet对象，并存放到ioc容器中
+		// 配置DispatcherServlet对象，并存放到ioc容器中
 		@Bean(name = DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
 		public DispatcherServlet dispatcherServlet(HttpProperties httpProperties, WebMvcProperties webMvcProperties) {
-			//实例化DispatcherServlet，进行相关配置，注册进ioc容器中
+			// 实例化DispatcherServlet，进行相关配置，注册进ioc容器中
 			DispatcherServlet dispatcherServlet = new DispatcherServlet();
 			dispatcherServlet.setDispatchOptionsRequest(webMvcProperties.isDispatchOptionsRequest());
 			dispatcherServlet.setDispatchTraceRequest(webMvcProperties.isDispatchTraceRequest());
@@ -108,7 +108,7 @@ public class DispatcherServletAutoConfiguration {
 			return dispatcherServlet;
 		}
 
-		//修改ioc容器的MultipartResolver对象的bean名称为multipartResolver
+		// 修改ioc容器的MultipartResolver对象的bean名称为multipartResolver
 		@Bean
 		@ConditionalOnBean(MultipartResolver.class)
 		@ConditionalOnMissingBean(name = DispatcherServlet.MULTIPART_RESOLVER_BEAN_NAME)
@@ -119,24 +119,24 @@ public class DispatcherServletAutoConfiguration {
 
 	}
 
-	//配置DispatcherServlet注册器配置对象
+	// 配置DispatcherServlet注册器配置对象
 	@Configuration(proxyBeanMethods = false)
-	//在DispatcherServletRegistrationCondition已执行的情况下才配置，主要判断DispatcherServlet注册器bean是否存在，不存在才进行配置
+	// 在DispatcherServletRegistrationCondition已执行的情况下才配置，主要判断DispatcherServlet注册器bean是否存在，不存在才进行配置
 	@Conditional(DispatcherServletRegistrationCondition.class)
-	//项目中有ServletRegistration类的情况下才进行配置
+	// 项目中有ServletRegistration类的情况下才进行配置
 	@ConditionalOnClass(ServletRegistration.class)
-	//从application.yml中获取web相关配置
+	// 从application.yml中获取web相关配置
 	@EnableConfigurationProperties(WebMvcProperties.class)
-	//导入DispatcherServletConfiguration对象的bean，即上面方法配置的bean
+	// 导入DispatcherServletConfiguration对象的bean，即上面方法配置的bean
 	@Import(DispatcherServletConfiguration.class)
 	protected static class DispatcherServletRegistrationConfiguration {
 
-		//配置DispatcherServlet注册器bean，注册进ioc容器
+		// 配置DispatcherServlet注册器bean，注册进ioc容器
 		@Bean(name = DEFAULT_DISPATCHER_SERVLET_REGISTRATION_BEAN_NAME)
 		@ConditionalOnBean(value = DispatcherServlet.class, name = DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
 		public DispatcherServletRegistrationBean dispatcherServletRegistration(DispatcherServlet dispatcherServlet,
 				WebMvcProperties webMvcProperties, ObjectProvider<MultipartConfigElement> multipartConfig) {
-			//实例化DispatcherServletRegistrationBean对象，进行相关配置，注册进ioc容器
+			// 实例化DispatcherServletRegistrationBean对象，进行相关配置，注册进ioc容器
 			DispatcherServletRegistrationBean registration = new DispatcherServletRegistrationBean(dispatcherServlet,
 					webMvcProperties.getServlet().getPath());
 			registration.setName(DEFAULT_DISPATCHER_SERVLET_BEAN_NAME);

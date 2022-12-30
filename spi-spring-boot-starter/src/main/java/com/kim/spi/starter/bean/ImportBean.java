@@ -26,4 +26,5 @@ public class ImportBean {
 	public void setImportName(String importName) {
 		this.importName = importName;
 	}
+
 }

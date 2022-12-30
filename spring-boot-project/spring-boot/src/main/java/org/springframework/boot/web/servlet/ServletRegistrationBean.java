@@ -175,7 +175,7 @@ public class ServletRegistrationBean<T extends Servlet> extends DynamicRegistrat
 	@Override
 	protected ServletRegistration.Dynamic addRegistration(String description, ServletContext servletContext) {
 		String name = getServletName();
-		//在这里将DispatcherServlet添加servlet容器，那么DispatcherServlet将生效，等同于web.xml
+		// 在这里将DispatcherServlet添加servlet容器，那么DispatcherServlet将生效，等同于web.xml
 		return servletContext.addServlet(name, this.servlet);
 	}
 
